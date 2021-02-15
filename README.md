@@ -1,6 +1,6 @@
 ## File Description
 
-This repository is used for depositing the analysis scripts and derived data/results for the paper "Gut microbiome variation modulates the effects of dietary fiber on host metabolism". 
+This repository is used for depositing the analysis scripts and derived data/results for the paper "[Gut microbiome variation modulates the effects of dietary fiber on host metabolism](https://www.researchsquare.com/article/rs-97357/v1)". 
 
 Here are brief descriptions for each folder, detailed explanation are commented within code and described in the paper:
 
@@ -9,6 +9,7 @@ Here are brief descriptions for each folder, detailed explanation are commented 
   - metabolites.R
   - rnaseq.R
   - rnaseqDEG.R
+  - appendix4SCFA.R
 
 * a folder called **data**, which contains raw data and derived Rdata file.
 
