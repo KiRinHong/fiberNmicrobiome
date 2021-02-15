@@ -135,7 +135,7 @@ write.csv(tax, "extdata/taxonomy_table_full.csv")
 ######## Generate asv_table_scfa.csv, taxonomy_table_scfa.csv, meta_scfa.csv
 ######## The value of phenotype are not scaled
 # load phenotypes
-scfa <- read.csv("data/histonePTM_Jessica/SCFA_results.csv", row.names = 1, stringsAsFactors = FALSE)
+scfa <- read.csv("data/histonePTM/SCFA_results.csv", row.names = 1, stringsAsFactors = FALSE)
 asv <- read.table("data/Microbiota16SrRNA/feature-table.txt", skip = 1, stringsAsFactors = FALSE)
 colnames(asv) <- asv[1,]
 asv <- asv[-1,]
