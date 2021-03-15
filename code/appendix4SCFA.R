@@ -1,9 +1,30 @@
-# association between SCFAs and metabolites module
+# association between SCFAs and metabolites module, correlation analysis between SCFAs and phenotype
 rm(list = ls())
 library(WGCNA)
 # load SCFA
-scfa <- read.csv("data/histonePTM/SCFA_results.csv", row.names = 1, stringsAsFactors = FALSE)
-load("data/derived_data/WGCNA-dataInput.Rdata")
+scfa <- read.csv("../data/histonePTM/SCFA_results.csv", row.names = 1, stringsAsFactors = FALSE)
+pheno <- read.table("../data/Phenotype/FatMassBW_LiverTriglycerides_glucose.txt", sep = "\t", 
+                    skip = 1, na.strings = c("NA", "#VALUE!"), fill = TRUE, stringsAsFactors = FALSE)
+# BW_sac(g)	GDAT_sac(g)	GDAT/BW(%)	TG(nmol/g wet weight)
+colnames(pheno) <- c("AnimalID", "WLS", "Diet", "Treatment", "GDAT_BW", "TG_nmol_gWW", "glucose_norm")
+id_sel <- intersect(rownames(scfa), pheno$AnimalID)
+scfa_sel <- scfa[id_sel,5:8]
+pheno_sel <- pheno[match(id_sel, pheno$AnimalID),5:7]
+# pearson correlation
+for (i in 1:4) {
+  for (j in 1:3){
+    tmp <- cor.test(scfa_sel[,i], pheno_sel[,j], method = "pearson")
+    print(paste0(colnames(scfa_sel)[i], " ~ ", colnames(pheno_sel)[j], ": ",  round(tmp$estimate,4), " (", round(tmp$p.value,4) , ")"))
+  }
+}
+# spearman correlation
+for (i in 1:4) {
+  for (j in 1:3){
+    tmp <- cor.test(scfa_sel[,i], pheno_sel[,j], method = "spearman")
+    print(paste0(colnames(scfa_sel)[i], " ~ ", colnames(pheno_sel)[j], ": ",  round(tmp$estimate,4), " (", round(tmp$p.value,4) , ")"))
+  }
+}
+load("../data/derived_data/WGCNA-dataInput.Rdata")
 id_sel <- intersect(rownames(scfa), rownames(datExpr))
 datTraits <- scfa[id_sel,5:8] # 37 samples left
 ### Select the soft threshold 

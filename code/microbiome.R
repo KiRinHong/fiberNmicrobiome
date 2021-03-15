@@ -251,7 +251,7 @@ otu.genus.comp <- otu.genus.comp/rowSums(otu.genus.comp)
 otu.genus.comp.log <- log(otu.genus.comp) # take logrithm
 colnames(otu.genus.comp.log) <- tax.genus@.Data[,"Genus"]
 z <- otu.genus.comp.log
-dyn.load("code/cvs/cdmm.so")
+dyn.load("code/cvs/cdmm.so") # for linux system
 source("code/cvs/cdmm.R")
 no_cores <- detectCores() - 1
 cl <- makeCluster(no_cores, type="FORK")
@@ -290,11 +290,11 @@ pseq <- read_csv2phyloseq(
   metadata.file = meta.file)
 pseq@phy_tree <- tree
 # Compute prevalence of each feature, store as data.frame
-prevdf = apply(X = otu_table(pseq),
+prevdf <- apply(X = otu_table(pseq),
                MARGIN = ifelse(taxa_are_rows(pseq), yes = 1, no = 2),
                FUN = function(x){sum(x > 0)})
 # Add taxonomy and total read counts to this data.frame
-prevdf = data.frame(Prevalence = prevdf,
+prevdf<- data.frame(Prevalence = prevdf,
                     TotalAbundance = taxa_sums(pseq),
                     tax_table(pseq))
 plyr::ddply(prevdf, "Phylum", function(df1){cbind(mean(df1$Prevalence),sum(df1$Prevalence))})
@@ -315,11 +315,8 @@ prevalenceThreshold = 0.05 * nsamples(pseq) # 2.25
 keepTaxa <- rownames(prevdf1)[(prevdf1$Prevalence >= prevalenceThreshold)]
 pseq<- prune_taxa(keepTaxa, pseq)
 # length(get_taxa_unique(pseq, taxonomic.rank = "Genus"))
-pseq.genus = tax_glom(pseq, "Genus", NArm = TRUE)
+pseq.genus <- tax_glom(pseq, "Genus", NArm = TRUE)
 otu.genus <- abundances(pseq.genus)
-meta.genus <- meta(pseq.genus)
-tax.genus <- tax_table(pseq.genus)
-tree.genus <- pseq.genus@phy_tree
 # filter out the taxa with nonzero proportion less than 20%
 keepTaxa1 <- rownames(otu.genus)[which(rowMeans(otu.genus!=0)>=0.2)]
 pseq.genus<- prune_taxa(keepTaxa1, pseq.genus)
@@ -335,6 +332,9 @@ for (i in 1:ncol(y)) {
   mod <- lm(scale(y[,i]) ~ as.factor(meta.genus$WLS) + as.factor(meta.genus$Cohort) + meta.genus$Diet)
   y[,i] <- resid(mod)
 }
+otu.genus.comp <- t(otu.genus)
+otu.genus.comp[otu.genus.comp == 0] <- 0.5 # use 0.5 to replace 0
+otu.genus.comp <- otu.genus.comp/rowSums(otu.genus.comp)
 otu.genus.comp.log <- log(otu.genus.comp) # take logrithm
 colnames(otu.genus.comp.log) <- tax.genus@.Data[,"Genus"]
 z <- otu.genus.comp.log
