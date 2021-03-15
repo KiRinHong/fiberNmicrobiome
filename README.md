@@ -5,6 +5,7 @@ This repository is used for depositing the analysis scripts and derived data/res
 Here are brief descriptions for each folder, detailed explanation are commented within code and described in the paper:
 
 * a folder called **code**, which contains the essential R scripts for our analysis. 
+  - cvs (log-contrast model)
   - microbiome.R
   - metabolites.R
   - rnaseq.R
@@ -19,5 +20,6 @@ Here are brief descriptions for each folder, detailed explanation are commented 
 
 ## Contact
 
-* Sofia M. Murga-Garrido - sofiamurgaga@gmail.com
 * Qilin Hong - qhong8@wisc.edu
+* Sofia M. Murga-Garrido - sofiamurgaga@gmail.com
+
